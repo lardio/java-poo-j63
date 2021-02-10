@@ -2,6 +2,7 @@ package fr.diginamic.recensement;
 
 import java.util.Scanner;
 
+import fr.diginamic.recensement.exceptions.*;
 import fr.diginamic.recensement.entites.Recensement;
 import fr.diginamic.recensement.services.RechercheDepartementsPlusPeuplees;
 import fr.diginamic.recensement.services.RecherchePopulationBorneService;
@@ -17,7 +18,6 @@ import fr.diginamic.recensement.utils.RecensementUtils;
 /**
  * Application de traitement des données de recensement de population
  * 
- * @param args
  */
 public class Application {
 
@@ -48,7 +48,13 @@ public class Application {
 			String choixMenu = scanner.nextLine();
 
 			// Conversion du choix utilisateur en int
-			choix = Integer.parseInt(choixMenu);
+			try {
+				// Conversion du choix utilisateur en int
+				choix = Integer.parseInt(choixMenu);
+			} catch (NumberFormatException e) {
+				System.err.println(e.getMessage());
+				choix = 0;
+			}
 
 			// On exécute l'option correspondant au choix de l'utilisateur
 			switch (choix) {
@@ -66,7 +72,11 @@ public class Application {
 				break;
 			case 4:
 				RecherchePopulationBorneService recherchePopBorne = new RecherchePopulationBorneService();
-				recherchePopBorne.traiter(recensement, scanner);
+				try {
+					recherchePopBorne.traiter(recensement, scanner);
+				} catch (RescencementException e) {
+					System.err.println(e.getMessage());
+				}
 				break;
 			case 5:
 				RechercheVillesPlusPeupleesDepartement rechercheVillesPlusPeupleesDepartement = new RechercheVillesPlusPeupleesDepartement();
